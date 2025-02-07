@@ -1,0 +1,4 @@
+FROM rustdesk/rustdesk-server:latest
+EXPOSE 21115 21116 21116/udp 21118
+VOLUME ["/root"]
+CMD ["hbbs", "-r", "${RAILWAY_PUBLIC_DOMAIN}:21117"]
