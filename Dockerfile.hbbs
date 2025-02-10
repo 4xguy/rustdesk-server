@@ -1,5 +1,2 @@
 FROM rustdesk/rustdesk-server:latest
-EXPOSE 21115 21116 21116/udp 21118
-VOLUME ["/root"]
 RUN chmod +x /usr/bin/hbbs
-CMD ["sh", "-c", "hbbs -r hbbr:21117"]
