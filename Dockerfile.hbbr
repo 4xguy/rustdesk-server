@@ -1,4 +1,5 @@
 FROM rustdesk/rustdesk-server:latest
 EXPOSE 21117 21119
 VOLUME ["/root"]
-CMD ["hbbr"]
+RUN chmod +x /usr/bin/hbbr
+CMD ["sh", "-c", "hbbr"]
