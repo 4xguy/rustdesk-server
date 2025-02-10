@@ -1,48 +1,31 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
 
 [deploy]
 restartPolicyType = "ALWAYS"
-numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 300
 
-# Configuration for HBBR service
-[services.hbbr]
-startCommand = "/bin/sh -c '/usr/bin/hbbr'"
-
-[[services.hbbr.ports]]
-port = "21117"
-protocol = "tcp"
-
-[[services.hbbr.ports]]
-port = "21119"
-protocol = "tcp"
-
-[[services.hbbr.volumes]]
-path = "/root"
-mode = "persistent"
-
-# Configuration for HBBS service
-[services.hbbs]
-startCommand = "/bin/sh -c '/usr/bin/hbbs -r ${{services.hbbr.RAILWAY_PRIVATE_DOMAIN}}:21117'"
-depends_on = ["hbbr"]
-
-[[services.hbbs.ports]]
+[[ports]]
 port = "21115"
 protocol = "tcp"
 
-[[services.hbbs.ports]]
+[[ports]]
 port = "21116"
 protocol = "tcp"
 
-[[services.hbbs.ports]]
+[[ports]]
 port = "21116"
 protocol = "udp"
 
-[[services.hbbs.ports]]
+[[ports]]
+port = "21117"
+protocol = "tcp"
+
+[[ports]]
 port = "21118"
 protocol = "tcp"
 
-[[services.hbbs.volumes]]
-path = "/root"
-mode = "persistent"
+[[ports]]
+port = "21119"
+protocol = "tcp"
