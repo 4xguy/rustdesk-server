@@ -1,0 +1,7 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "./hbbs -r 127.0.0.1:21117 & ./hbbr"
+restartPolicyType = "ALWAYS"
