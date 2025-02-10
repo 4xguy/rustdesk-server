@@ -26,7 +26,7 @@ RUN mkdir -p /etc/s6-overlay/s6-rc.d/hbbs \
 COPY --chmod=755 <<-"EOF" /etc/s6-overlay/s6-rc.d/hbbs/run
 #!/command/with-contenv sh
 cd /data
-exec /usr/bin/hbbs -r 127.0.0.1:21117
+exec /usr/bin/hbbs -r localhost:21117
 EOF
 
 COPY --chmod=755 <<-"EOF" /etc/s6-overlay/s6-rc.d/hbbr/run
@@ -35,24 +35,12 @@ cd /data
 exec /usr/bin/hbbr
 EOF
 
-# Create healthcheck script
-COPY --chmod=755 <<-"EOF" /usr/bin/healthcheck.sh
-#!/bin/sh
-if ! pgrep -x hbbs > /dev/null; then
-    exit 1
-fi
-if ! pgrep -x hbbr > /dev/null; then
-    exit 1
-fi
-exit 0
-EOF
-
 # Configure services
-RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/hbbs && \
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d && \
+    touch /etc/s6-overlay/s6-rc.d/user/contents.d/hbbs && \
     touch /etc/s6-overlay/s6-rc.d/user/contents.d/hbbr
 
 EXPOSE 21115 21116 21116/udp 21117 21118 21119
-HEALTHCHECK --interval=10s --timeout=5s CMD /usr/bin/healthcheck.sh
 WORKDIR /data
 
 ENTRYPOINT ["/init"]

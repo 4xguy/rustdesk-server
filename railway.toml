@@ -3,8 +3,6 @@ builder = "DOCKERFILE"
 
 [deploy]
 restartPolicyType = "ALWAYS"
-healthcheckPath = "/health"
-healthcheckTimeout = 300
 numReplicas = 1  # Must be 1 since volumes don't support replicas
 
 [[ports]]
@@ -32,5 +30,5 @@ port = "21119"
 protocol = "tcp"
 
 [[volume]]
-source = "rustdesk-server"
+source = "rustdesk-data"
 target = "/data"
