@@ -10,5 +10,3 @@ RUN chmod +x /usr/bin/hbbs && \
 
 # Create data directory
 RUN mkdir -p /root
-
-VOLUME /root

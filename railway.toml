@@ -18,6 +18,10 @@ protocol = "tcp"
 port = "21119"
 protocol = "tcp"
 
+[[services.hbbr.volumes]]
+path = "/root"
+mode = "persistent"
+
 # Configuration for HBBS service
 [services.hbbs]
 startCommand = "/bin/sh -c '/usr/bin/hbbs -r ${{services.hbbr.RAILWAY_PRIVATE_DOMAIN}}:21117'"
@@ -38,3 +42,7 @@ protocol = "udp"
 [[services.hbbs.ports]]
 port = "21118"
 protocol = "tcp"
+
+[[services.hbbs.volumes]]
+path = "/root"
+mode = "persistent"
