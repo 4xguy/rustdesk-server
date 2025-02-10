@@ -1,9 +1,10 @@
 [build]
 builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.hbbs"
 
 [deploy]
-restartPolicyType = "ALWAYS"
-numReplicas = 1  # Must be 1 since volumes don't support replicas
+restartPolicyType = "ON_FAILURE"
+numReplicas = 1
 
 [[ports]]
 port = "21115"
@@ -18,17 +19,9 @@ port = "21116"
 protocol = "udp"
 
 [[ports]]
-port = "21117"
-protocol = "tcp"
-
-[[ports]]
 port = "21118"
 protocol = "tcp"
 
-[[ports]]
-port = "21119"
-protocol = "tcp"
-
 [[volume]]
-source = "rustdesk-data"
+source = "rustdesk-hbbs-data"
 target = "/data"

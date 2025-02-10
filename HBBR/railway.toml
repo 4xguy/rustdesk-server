@@ -1,0 +1,19 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.hbbr"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+numReplicas = 1
+
+[[ports]]
+port = "21117"
+protocol = "tcp"
+
+[[ports]]
+port = "21119"
+protocol = "tcp"
+
+[[volume]]
+source = "rustdesk-hbbr-data"
+target = "/data"
