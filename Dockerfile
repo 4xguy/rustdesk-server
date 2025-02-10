@@ -18,16 +18,20 @@ RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
 
 # Create necessary directories
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/hbbs \
-    mkdir -p /etc/s6-overlay/s6-rc.d/hbbr
+    mkdir -p /etc/s6-overlay/s6-rc.d/hbbr \
+    mkdir -p /data && \
+    chmod 777 /data
 
 # Add service definitions
 COPY --chmod=755 <<-"EOF" /etc/s6-overlay/s6-rc.d/hbbs/run
 #!/command/with-contenv sh
+cd /data
 exec /usr/bin/hbbs -r 127.0.0.1:21117
 EOF
 
 COPY --chmod=755 <<-"EOF" /etc/s6-overlay/s6-rc.d/hbbr/run
 #!/command/with-contenv sh
+cd /data
 exec /usr/bin/hbbr
 EOF
 
@@ -50,6 +54,5 @@ RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/hbbs && \
 EXPOSE 21115 21116 21116/udp 21117 21118 21119
 HEALTHCHECK --interval=10s --timeout=5s CMD /usr/bin/healthcheck.sh
 WORKDIR /data
-VOLUME /data
 
 ENTRYPOINT ["/init"]
