@@ -6,14 +6,14 @@ services:
   hbbs:
     build:
       context: .
-      dockerfile: Dockerfile.hbbs
+      dockerfile: Dockerfile
     container_name: hbbs
     ports:
       - 21115:21115
       - 21116:21116
       - 21116:21116/udp
       - 21118:21118
-    command: sh -c 'chmod +x /usr/bin/hbbs && hbbs -r hbbr:21117'
+    command: sh -c 'hbbs -r hbbr:21117'
     volumes:
       - ./data:/root
     networks:
@@ -24,12 +24,12 @@ services:
   hbbr:
     build:
       context: .
-      dockerfile: Dockerfile.hbbr
+      dockerfile: Dockerfile
     container_name: hbbr
     ports:
       - 21117:21117
       - 21119:21119
-    command: sh -c 'chmod +x /usr/bin/hbbr && hbbr'
+    command: sh -c 'hbbr'
     volumes:
       - ./data:/root
     networks:

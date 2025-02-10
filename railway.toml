@@ -1,5 +1,6 @@
 [build]
 builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 restartPolicyType = "ALWAYS"
@@ -10,8 +11,7 @@ HBBR_SERVICE = "${{Linked.HBBR.RAILWAY_SERVICE_DOMAIN}}"
 
 # Configuration for HBBR service
 [services.hbbr]
-dockerfile = "Dockerfile.hbbr"
-startCommand = "sh -c 'chmod +x /usr/bin/hbbr && hbbr'"
+startCommand = "sh -c 'hbbr'"
 
 [[services.hbbr.ports]]
 port = "21117"
@@ -23,8 +23,7 @@ protocol = "tcp"
 
 # Configuration for HBBS service
 [services.hbbs]
-dockerfile = "Dockerfile.hbbs"
-startCommand = "sh -c 'chmod +x /usr/bin/hbbs && hbbs -r ${HBBR_SERVICE}:21117'"
+startCommand = "sh -c 'hbbs -r ${HBBR_SERVICE}:21117'"
 depends_on = ["hbbr"]
 
 [[services.hbbs.ports]]
