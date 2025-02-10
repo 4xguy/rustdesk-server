@@ -1,7 +1,14 @@
-FROM rustdesk/rustdesk-server:latest
+FROM alpine:latest
 
-# Create a shell script to execute commands
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copy binaries from rustdesk image
+COPY --from=rustdesk/rustdesk-server:latest /usr/bin/hbbs /usr/bin/hbbs
+COPY --from=rustdesk/rustdesk-server:latest /usr/bin/hbbr /usr/bin/hbbr
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Set execute permissions
+RUN chmod +x /usr/bin/hbbs && \
+    chmod +x /usr/bin/hbbr
+
+# Create data directory
+RUN mkdir -p /root
+
+VOLUME /root
