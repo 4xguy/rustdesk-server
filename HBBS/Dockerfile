@@ -26,7 +26,7 @@ COPY --chmod=755 <<-"EOF" /etc/s6-overlay/s6-rc.d/hbbs/run
 echo "Starting HBBS service..."
 cd /data
 exec 2>&1
-RELAY_SERVER=${RELAY_SERVER:-rustdesk-hbbr.railway.internal}
+RELAY_SERVER=${RELAY_SERVER:rustdesk-hbbr.railway.internal}
 echo "Connecting to relay server: ${RELAY_SERVER}:21117"
 exec /usr/bin/hbbs -r ${RELAY_SERVER}:21117
 EOF
