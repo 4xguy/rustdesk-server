@@ -25,3 +25,6 @@ protocol = "tcp"
 [[volume]]
 source = "rustdesk-hbbs-data"
 target = "/data"
+
+[variables]
+RELAY_SERVER = "rustdesk-hbbr.railway.internal"
