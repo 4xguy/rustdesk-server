@@ -3,5 +3,5 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "/usr/bin/hbbs -r 127.0.0.1:21117 & /usr/bin/hbbr"
+startCommand = "/usr/bin/hbbr & sleep 2 && /usr/bin/hbbs -r 127.0.0.1:21117"
 restartPolicyType = "ALWAYS"
