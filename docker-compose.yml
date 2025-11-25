@@ -23,7 +23,7 @@ services:
       - rustdesk-net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pidof hbbr >/dev/null"]
+      test: ["CMD-SHELL", "ps -ef | grep -q '[h]bbr'"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -49,10 +49,10 @@ services:
       - rustdesk-net
     depends_on:
       hbbr:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pidof hbbs >/dev/null"]
+      test: ["CMD-SHELL", "ps -ef | grep -q '[h]bbs'"]
       interval: 30s
       timeout: 10s
       retries: 3
