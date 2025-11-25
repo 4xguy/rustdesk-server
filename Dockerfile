@@ -1,6 +1,12 @@
-# RustDesk Server - Dokploy Deployment
+# RustDesk Server - Dokploy Deployment (Single Container)
 # Runs both hbbs (signal) and hbbr (relay) servers
-FROM rustdesk/rustdesk-server:latest
+FROM rustdesk/rustdesk-server:latest AS bins
+
+FROM alpine:latest
+
+# Copy binaries from official image
+COPY --from=bins /usr/bin/hbbs /usr/bin/hbbs
+COPY --from=bins /usr/bin/hbbr /usr/bin/hbbr
 
 # Configuration
 ENV RELAY=rustdesk.icvida.com
@@ -18,5 +24,11 @@ EXPOSE 21115 21116 21116/udp 21117 21118 21119
 VOLUME /data
 WORKDIR /data
 
-# Start both services using s6-overlay init system
-ENTRYPOINT ["/init"]
+# Create startup script that runs both services
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'cd /data' >> /start.sh && \
+    echo '/usr/bin/hbbr &' >> /start.sh && \
+    echo 'exec /usr/bin/hbbs -r "$RELAY"' >> /start.sh && \
+    chmod +x /start.sh
+
+CMD ["/start.sh"]
