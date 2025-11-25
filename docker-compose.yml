@@ -1,36 +1,66 @@
-version: '3'
+version: '3.8'
 
 networks:
   rustdesk-net:
-    external: false
+    driver: bridge
+    name: rustdesk-net
+
+volumes:
+  rustdesk-data:
+    name: rustdesk-data
 
 services:
+  hbbr:
+    container_name: hbbr
+    image: ${RUSTDESK_IMAGE:-rustdesk/rustdesk-server:latest}
+    command: hbbr
+    ports:
+      - "${HBBR_PORT_21117:-21117}:21117"
+      - "${HBBR_PORT_21119:-21119}:21119"
+    volumes:
+      - rustdesk-data:/root
+    networks:
+      - rustdesk-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "21117"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.dokploy.service=hbbr"
+      - "com.dokploy.description=RustDesk Relay Server"
+    environment:
+      - RUST_LOG=${RUST_LOG:-info}
+
   hbbs:
     container_name: hbbs
+    image: ${RUSTDESK_IMAGE:-rustdesk/rustdesk-server:latest}
+    command: hbbs -r ${RELAY_ADDRESS:-rustdesk.icvida.com}:${RELAY_PORT:-21117}
     ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21118:21118
-    image: rustdesk/rustdesk-server:latest
-    command: hbbs -r rustdesk.example.com:21117
+      - "${HBBS_PORT_21115:-21115}:21115"
+      - "${HBBS_PORT_21116_TCP:-21116}:21116"
+      - "${HBBS_PORT_21116_UDP:-21116}:21116/udp"
+      - "${HBBS_PORT_21118:-21118}:21118"
     volumes:
-      - ./data:/root
+      - rustdesk-data:/root
     networks:
       - rustdesk-net
     depends_on:
-      - hbbr
+      hbbr:
+        condition: service_healthy
     restart: unless-stopped
-
-  hbbr:
-    container_name: hbbr
-    ports:
-      - 21117:21117
-      - 21119:21119
-    image: rustdesk/rustdesk-server:latest
-    command: hbbr
-    volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "21115"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    labels:
+      - "com.dokploy.service=hbbs"
+      - "com.dokploy.description=RustDesk Signal Server"
+      - "com.dokploy.relay=${RELAY_ADDRESS:-rustdesk.icvida.com}"
+    environment:
+      - RUST_LOG=${RUST_LOG:-info}
+      - ALWAYS_USE_RELAY=${ALWAYS_USE_RELAY:-N}
