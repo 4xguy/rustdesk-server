@@ -18,7 +18,7 @@ services:
       - "${HBBR_PORT_21117:-21117}:21117"
       - "${HBBR_PORT_21119:-21119}:21119"
     volumes:
-      - rustdesk-data:/root
+      - rustdesk-data:/data
     networks:
       - rustdesk-net
     restart: unless-stopped
@@ -44,7 +44,7 @@ services:
       - "${HBBS_PORT_21116_UDP:-21116}:21116/udp"
       - "${HBBS_PORT_21118:-21118}:21118"
     volumes:
-      - rustdesk-data:/root
+      - rustdesk-data:/data
     networks:
       - rustdesk-net
     depends_on:
