@@ -23,7 +23,7 @@ services:
       - rustdesk-net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "21117"]
+      test: ["CMD", "/package/admin/s6/command/s6-svstat", "/run/s6-rc/servicedirs/hbbr"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -52,7 +52,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "21115"]
+      test: ["CMD", "/package/admin/s6/command/s6-svstat", "/run/s6-rc/servicedirs/hbbs"]
       interval: 30s
       timeout: 10s
       retries: 3
